@@ -1,4 +1,9 @@
 <?php
+
+// Sécurité: Empêcher l'accès direct aux fichiers
+defined('ABSPATH') or die('Access denied.');
+
+// Menu "Réservation" dans le Back-office
 function back_office_page() {
     add_menu_page(
         'Réservation',
@@ -13,6 +18,7 @@ function back_office_page() {
 
 add_action( 'admin_menu', 'back_office_page' );
 
+// Page "Réservation" dans le Back-office qui affiche les réservations dans un tableau
 function back_office_page_html() {
     ?>
     <div class="wrap">

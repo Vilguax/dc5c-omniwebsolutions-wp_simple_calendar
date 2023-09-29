@@ -7,14 +7,23 @@
  * Author URI: https://omniwebsolutions.fr
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * WordPress version: 6.3.1
- * PHP version: 8.0
+ * Requires at least: 6.0
+ * Requires PHP: 8.0
+ * License: GPL-2.0+
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
+
+// Sécurité: Empêcher l'accès direct aux fichiers
+defined('ABSPATH') or die('Access denied.');
+
+// Inclusion du fichier back-office.php
 require_once plugin_dir_path( __FILE__ ) . 'back-office.php';
 
+// Hook d'activation pour créer la table de réservation
 register_activation_hook(__FILE__, 'create_reservation_table');
 
+// Fonction pour créer la table lors de l'activation du plugin
 function create_reservation_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'reservations';
@@ -34,6 +43,7 @@ function create_reservation_table() {
     }
 }
 
+// Fonction pour afficher le calendrier
 function display_simple_calendar() {
     ob_start(); ?>
     <div id="calendar-container" data-user-id="<?php echo get_current_user_id(); ?>">
@@ -53,8 +63,10 @@ function display_simple_calendar() {
     return ob_get_clean();
 }
 
+// Shortcode pour afficher le calendrier
 add_shortcode('simple_calendar', 'display_simple_calendar');
 
+// Fonction pour enregistrer les scripts et les styles
 function enqueue_my_scripts() {
     if(is_page('calendar')) { 
         wp_enqueue_script('my-calendar', plugin_dir_url(__FILE__) . 'calendar.js', array('jquery'), null, true);
@@ -62,11 +74,13 @@ function enqueue_my_scripts() {
     }
 }
 
-
+// Enregistrer les scripts et les styles
 add_action('wp_enqueue_scripts', 'enqueue_my_scripts');
 
+// Hook pour enregistrer les réservations
 add_action('wp_ajax_reserve_slots', 'reserve_slots_handler');
 
+// Fonction pour enregistrer les réservations
 function reserve_slots_handler() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'reservations';
@@ -95,11 +109,15 @@ function reserve_slots_handler() {
             }
         }
     }
-    wp_send_json_success(array('redirect_url' => 'https://hackathon.omniwebsolutions.fr/calendar/remerciement/'));
+    // Récupération de l'URL du site pour rediriger l'utilisateur après la réservation
+    $site_url = get_site_url();
+    $redirect_url = $site_url . '/calendar/remerciement/';
+    wp_send_json_success(array('redirect_url' => $redirect_url));
 }
 
 add_action('wp_ajax_get_reserved_slots', 'get_reserved_slots_handler');
 
+// Fonction pour récupérer les créneaux réservés
 function get_reserved_slots_handler() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'reservations';
@@ -113,13 +131,16 @@ function get_reserved_slots_handler() {
     wp_send_json_success($reserved_slots);
 }
 
+// Fonction pour envoyer un email de notification de réservation à l'adresse d'administration de part l'adresse reservation@domaine
 function send_reservation_email($user_id, $date, $time_slot) {
     $user_info = get_userdata($user_id);
     $to = get_option('admin_email');
     $subject = 'Nouvelle réservation !';
     $message = "L'utilisateur " . $user_info->user_login . " a fait une réservation pour le " . $date . " à " . $time_slot . ".";
     
-    $headers[] = 'From: Formulaire de réservation <reservation@omniwebsolutions.fr>';
+    $site_url = get_site_url();
+    $domain = parse_url($site_url, PHP_URL_HOST);
+    $headers[] = 'From: Formulaire de réservation <reservation@' . $domain . '>';
     
     if(!wp_mail($to, $subject, $message, $headers)){
         error_log('L\'email de notification de réservation n\'a pas pu être envoyé.');
@@ -128,4 +149,5 @@ function send_reservation_email($user_id, $date, $time_slot) {
     }
 }
 
+// Ajoute le menu "Réservation" dans le back-office
 add_action( 'admin_menu', 'back_office_page' );
