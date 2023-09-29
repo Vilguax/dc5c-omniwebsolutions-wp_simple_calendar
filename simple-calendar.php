@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: Simple Calendar Plugin
- * Description: Un simple plugin de calendrier interactif
+ * Plugin Name: Simple Calendar
+ * Description: Une simple extension de calendrier interactif
  * Version: 1.0
  * Author: Axel PELASSA
  * Author URI: https://omniwebsolutions.fr

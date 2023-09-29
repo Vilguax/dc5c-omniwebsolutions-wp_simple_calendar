@@ -1,4 +1,4 @@
-=== Simple Calendar Plugin ===
+=== Simple Calendar ===
 Contributors: Axel PELASSA
 Tags: calendar, reservation
 Requires at least: 6.0
