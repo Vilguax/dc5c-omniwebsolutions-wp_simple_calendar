@@ -1,6 +1,6 @@
-=== Simple Calendar ===
+=== OmniWebSolutions Simple Calendar ===
 Contributors: Axel PELASSA
-Tags: calendar, reservation
+Tags: calendar, reservation, omniwebsolutions
 Requires at least: 6.0
 Tested up to: 6.3.1
 Requires PHP: 8.0
