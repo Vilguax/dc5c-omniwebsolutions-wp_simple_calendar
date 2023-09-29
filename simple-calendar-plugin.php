@@ -4,6 +4,11 @@
  * Description: Un simple plugin de calendrier interactif
  * Version: 1.0
  * Author: Axel PELASSA
+ * Author URI: https://omniwebsolutions.fr
+ * License: GPL2
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * WordPress version: 6.3.1
+ * PHP version: 8.0
 */
 
 require_once plugin_dir_path( __FILE__ ) . 'back-office.php';
