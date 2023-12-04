@@ -2,7 +2,7 @@
 Contributors: Axel PELASSA
 Tags: calendar, reservation, omniwebsolutions
 Requires at least: 6.0
-Tested up to: 6.3.1
+Tested up to: 6.4.1
 Requires PHP: 8.0
 Stable tag: 1.0
 License: GPLv2 or later
