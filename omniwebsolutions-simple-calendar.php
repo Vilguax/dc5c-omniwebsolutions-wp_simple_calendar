@@ -46,7 +46,7 @@ function create_reservation_table() {
 // Fonction pour afficher le calendrier
 function display_simple_calendar() {
     ob_start(); ?>
-    <div id="calendar-container" data-user-id="<?php echo get_current_user_id(); ?>">
+    <div id="calendar-container" data-user-id="<?php echo esc_attr(get_current_user_id()); ?>">
         <div id="calendar-header">
             <button id="prev-month">Mois précédent</button>
             <span id="current-month-year"></span>
@@ -57,8 +57,8 @@ function display_simple_calendar() {
         <button id="reserve-button" style="display:none;">Réserver</button>
         <div id="error-message"></div>
     </div>
-    <script defer src="<?php echo plugin_dir_url(__FILE__) . 'calendar.js'; ?>"></script>
-    <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'calendar.css'; ?>">
+    <script defer src="<?php echo esc_url(plugin_dir_url(__FILE__) . 'calendar.js'); ?>"></script>
+    <link rel="stylesheet" href="<?php echo esc_url(plugin_dir_url(__FILE__) . 'calendar.css'); ?>">
     <?php
     return ob_get_clean();
 }

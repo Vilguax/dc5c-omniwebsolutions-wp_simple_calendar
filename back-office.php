@@ -40,10 +40,10 @@ function back_office_page_html() {
                 foreach ($reservations as $reservation) {
                     $user_info = get_userdata($reservation->user_id);
                     echo '<tr>';
-                    echo '<td>' . $reservation->id . '</td>';
-                    echo '<td>' . $user_info->user_email . '</td>';
-                    echo '<td>' . $reservation->reservation_date . '</td>';
-                    echo '<td>' . $reservation->time_slot . '</td>';
+                    echo '<td>' . esc_html($reservation->id) . '</td>';
+                    echo '<td>' . esc_html($user_info->user_email) . '</td>';
+                    echo '<td>' . esc_html($reservation->reservation_date) . '</td>';
+                    echo '<td>' . esc_html($reservation->time_slot) . '</td>';
                     echo '</tr>';
                 }
                 ?>
