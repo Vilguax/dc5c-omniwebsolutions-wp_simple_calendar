@@ -74,14 +74,20 @@ function enqueue_my_scripts() {
     }
 }
 
-// Enregistrer les scripts et les styles
 add_action('wp_enqueue_scripts', 'enqueue_my_scripts');
-
-// Hook pour enregistrer les réservations
 add_action('wp_ajax_reserve_slots', 'reserve_slots_handler');
 
-// Fonction pour enregistrer les réservations
 function reserve_slots_handler() {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'action_reserve_slots')) {
+        wp_send_json_error('Nonce non valide.');
+        exit;
+    }
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error('Permission non accordée.');
+        exit;
+    }
+
     global $wpdb;
     $table_name = $wpdb->prefix . 'reservations';
     $user_id = intval($_POST['userId']);
@@ -109,7 +115,7 @@ function reserve_slots_handler() {
             }
         }
     }
-    // Récupération de l'URL du site pour rediriger l'utilisateur après la réservation
+
     $site_url = get_site_url();
     $redirect_url = $site_url . '/calendar/remerciement/';
     wp_send_json_success(array('redirect_url' => $redirect_url));
@@ -117,8 +123,17 @@ function reserve_slots_handler() {
 
 add_action('wp_ajax_get_reserved_slots', 'get_reserved_slots_handler');
 
-// Fonction pour récupérer les créneaux réservés
 function get_reserved_slots_handler() {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'action_get_reserved_slots')) {
+        wp_send_json_error('Nonce non valide.');
+        exit;
+    }
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error('Permission non accordée.');
+        exit;
+    }
+
     global $wpdb;
     $table_name = $wpdb->prefix . 'reservations';
     $date = sanitize_text_field($_POST['date']);
