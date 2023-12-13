@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `action=fetch_reserved_slots&date=${selectedDate}`,
+            body: `action=fetch_reserved_slots&date=${selectedDate}&nonce=${my_script_vars.nonce}`,
         })
         .then(response => response.json())
         .then(data => {
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('date', selectedDate);
         formData.append('slots', JSON.stringify(slotsData));
         
-        fetch(my_script_vars.ajaxurl, { 
+        fetch(ows_cal_my_script_vars.ajaxurl, { 
             method: 'POST',
             body: formData,
         })

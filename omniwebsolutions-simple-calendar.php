@@ -71,7 +71,7 @@ add_shortcode('simple_calendar', 'ows_cal_display_simple_calendar');
 function ows_cal_enqueue_my_scripts() {
     if(is_page('calendar')) { 
         wp_enqueue_script('my-calendar', plugin_dir_url(__FILE__) . 'calendar.js', array('jquery'), null, true);
-        wp_localize_script('my-calendar', 'my_script_vars', array('ajaxurl' => admin_url('admin-ajax.php')));
+        wp_localize_script('my-calendar', 'my_script_vars', array('ajaxurl' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('action_fetch_reserved_slots')));
     }
 }
 
@@ -144,7 +144,12 @@ function ows_cal_fetch_reserved_slots_handler() {
         $date
     ));
 
-    wp_send_json_success($reserved_slots);
+    if (false === $reserved_slots) {
+        error_log('Erreur lors de la récupération des créneaux réservés.');
+        wp_send_json_error('Could not get reserved slots');
+    } else {
+        wp_send_json_success($reserved_slots);
+    }
 }
 
 // Fonction pour envoyer un email de notification de réservation à l'adresse d'administration de part l'adresse reservation@domaine
