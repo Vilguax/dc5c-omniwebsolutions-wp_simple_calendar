@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `action=get_reserved_slots&date=${selectedDate}`,
+            body: `action=fetch_reserved_slots&date=${selectedDate}`,
         })
         .then(response => response.json())
         .then(data => {

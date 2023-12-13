@@ -21,10 +21,10 @@ defined('ABSPATH') or die('Access denied.');
 require_once plugin_dir_path( __FILE__ ) . 'back-office.php';
 
 // Hook d'activation pour créer la table de réservation
-register_activation_hook(__FILE__, 'create_reservation_table');
+register_activation_hook(__FILE__, 'ows_cal_create_reservation_table');
 
 // Fonction pour créer la table lors de l'activation du plugin
-function create_reservation_table() {
+function ows_cal_create_reservation_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'reservations';
     $check_table_query = $wpdb->prepare("SHOW TABLES LIKE %s", $table_name);
@@ -45,7 +45,7 @@ function create_reservation_table() {
 
 
 // Fonction pour afficher le calendrier
-function display_simple_calendar() {
+function ows_cal_display_simple_calendar() {
     ob_start(); ?>
     <div id="calendar-container" data-user-id="<?php echo esc_attr(get_current_user_id()); ?>">
         <div id="calendar-header">
@@ -65,20 +65,20 @@ function display_simple_calendar() {
 }
 
 // Shortcode pour afficher le calendrier
-add_shortcode('simple_calendar', 'display_simple_calendar');
+add_shortcode('simple_calendar', 'ows_cal_display_simple_calendar');
 
 // Fonction pour enregistrer les scripts et les styles
-function enqueue_my_scripts() {
+function ows_cal_enqueue_my_scripts() {
     if(is_page('calendar')) { 
         wp_enqueue_script('my-calendar', plugin_dir_url(__FILE__) . 'calendar.js', array('jquery'), null, true);
         wp_localize_script('my-calendar', 'my_script_vars', array('ajaxurl' => admin_url('admin-ajax.php')));
     }
 }
 
-add_action('wp_enqueue_scripts', 'enqueue_my_scripts');
-add_action('wp_ajax_reserve_slots', 'reserve_slots_handler');
+add_action('wp_enqueue_scripts', 'ows_cal_enqueue_my_scripts');
+add_action('wp_ajax_reserve_slots', 'ows_cal_reserve_slots_handler');
 
-function reserve_slots_handler() {
+function ows_cal_reserve_slots_handler() {
     if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'action_reserve_slots')) {
         wp_send_json_error('Nonce non valide.');
         exit;
@@ -112,7 +112,7 @@ function reserve_slots_handler() {
                 array('%d', '%s', '%s')
             );
             if($success) {
-                send_reservation_email($user_id, $date, $time_slot);
+                ows_cal_send_reservation_email($user_id, $date, $time_slot);
             }
         }
     }
@@ -122,10 +122,10 @@ function reserve_slots_handler() {
     wp_send_json_success(array('redirect_url' => $redirect_url));
 }
 
-add_action('wp_ajax_get_reserved_slots', 'get_reserved_slots_handler');
+add_action('wp_ajax_fetch_reserved_slots', 'ows_cal_fetch_reserved_slots_handler');
 
-function get_reserved_slots_handler() {
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'action_get_reserved_slots')) {
+function ows_cal_fetch_reserved_slots_handler() {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'action_fetch_reserved_slots')) {
         wp_send_json_error('Nonce non valide.');
         exit;
     }
@@ -148,7 +148,7 @@ function get_reserved_slots_handler() {
 }
 
 // Fonction pour envoyer un email de notification de réservation à l'adresse d'administration de part l'adresse reservation@domaine
-function send_reservation_email($user_id, $date, $time_slot) {
+function ows_cal_send_reservation_email($user_id, $date, $time_slot) {
     $user_info = get_userdata($user_id);
     $to = get_option('admin_email');
     $subject = 'Nouvelle réservation !';
@@ -166,4 +166,4 @@ function send_reservation_email($user_id, $date, $time_slot) {
 }
 
 // Ajoute le menu "Réservation" dans le back-office
-add_action( 'admin_menu', 'back_office_page' );
+add_action( 'admin_menu', 'ows_cal_back_office_page' );
