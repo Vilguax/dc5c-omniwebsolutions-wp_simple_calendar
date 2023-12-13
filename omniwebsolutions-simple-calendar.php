@@ -27,8 +27,8 @@ register_activation_hook(__FILE__, 'create_reservation_table');
 function create_reservation_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'reservations';
-
-    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+    $check_table_query = $wpdb->prepare("SHOW TABLES LIKE %s", $table_name);
+    if($wpdb->get_var($check_table_query) != $table_name) {
         $charset_collate = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE $table_name (
             id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -42,6 +42,7 @@ function create_reservation_table() {
         dbDelta($sql);
     }
 }
+
 
 // Fonction pour afficher le calendrier
 function display_simple_calendar() {

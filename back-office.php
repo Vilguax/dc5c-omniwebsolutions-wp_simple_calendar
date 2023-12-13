@@ -18,7 +18,6 @@ function back_office_page() {
 
 add_action( 'admin_menu', 'back_office_page' );
 
-// Page "Réservation" dans le Back-office qui affiche les réservations dans un tableau
 function back_office_page_html() {
     ?>
     <div class="wrap">
@@ -36,7 +35,7 @@ function back_office_page_html() {
                 <?php
                 global $wpdb;
                 $table_name = $wpdb->prefix . 'reservations';
-                $reservations = $wpdb->get_results("SELECT * FROM $table_name");
+                $reservations = $wpdb->get_results($wpdb->prepare("SELECT * FROM %s", $table_name));
                 foreach ($reservations as $reservation) {
                     $user_info = get_userdata($reservation->user_id);
                     echo '<tr>';
