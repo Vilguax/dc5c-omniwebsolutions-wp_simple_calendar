@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('date', selectedDate);
         formData.append('slots', JSON.stringify(slotsData));
         
-        fetch(ows_cal_my_script_vars.ajaxurl, { 
+        fetch(my_script_vars.ajaxurl, { 
             method: 'POST',
             body: formData,
         })

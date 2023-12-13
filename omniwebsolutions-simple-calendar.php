@@ -69,10 +69,8 @@ add_shortcode('simple_calendar', 'ows_cal_display_simple_calendar');
 
 // Fonction pour enregistrer les scripts et les styles
 function ows_cal_enqueue_my_scripts() {
-    if(is_page('calendar')) { 
         wp_enqueue_script('my-calendar', plugin_dir_url(__FILE__) . 'calendar.js', array('jquery'), null, true);
         wp_localize_script('my-calendar', 'my_script_vars', array('ajaxurl' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('action_fetch_reserved_slots')));
-    }
 }
 
 add_action('wp_enqueue_scripts', 'ows_cal_enqueue_my_scripts');
