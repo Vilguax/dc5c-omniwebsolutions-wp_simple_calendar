@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('userId', userId);
         formData.append('date', selectedDate);
         formData.append('slots', JSON.stringify(slotsData));
+        formData.append('nonce', my_script_vars.nonce_reserve_slots);
         
         fetch(my_script_vars.ajaxurl, { 
             method: 'POST',
