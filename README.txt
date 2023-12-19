@@ -1,5 +1,5 @@
 === OmniWebSolutions Simple Calendar ===
-Contributors: Axel PELASSA
+Contributors: Vilguax
 Tags: calendar, reservation, omniwebsolutions
 Requires at least: 6.0
 Tested up to: 6.4.1
